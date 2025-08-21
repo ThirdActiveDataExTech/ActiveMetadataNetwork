@@ -12,6 +12,7 @@
 |--------|------|
 | `dcat-3d-graph/` | DCAT 메타데이터를 의미 임베딩하여 3D 지식그래프로 시각화<br>→ UMAP + cosine similarity + Plotly 기반 |
 | `dcat-dataset-network/` | 데이터셋 간 키워드 유사도 기반 2D 네트워크 그래프 시각화<br>→ Cytoscape + Vue 기반 |
+| `vector-projection-3d/` | 임베딩값을 3차원 축소하여 노드로 표현하고, 카테고리 관계를 그래프 시각화<br>→ Vue 기반 |
 
 ---
 
