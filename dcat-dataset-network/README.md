@@ -52,3 +52,7 @@ cd your-repo
 npm install
 npm run serve
 ```
+
+---
+## 결과물 예시
+![image](./public/results_sample.png)
