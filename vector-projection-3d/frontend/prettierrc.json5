@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json.schemastore.org/prettierrc",
+  "printWidth": 120, // 코드 한 줄의 최대 길이
+  "tabWidth": 2,     // 탭 문자의 간격 지정
+  "useTabs": false,  // 탭 문자 대신 스페이스를 사용할지 여부
+  "semi": true,      // 문장의 끝에 세미콜론을 사용할지 여부를 결정
+  "singleQuote": false, // 문자열을 싱글 쿼트 (**'**)로 감쌀지 여부를 결정
+  "quoteProps": "as-needed",   // 객체의 프로퍼티 키에 따라 쿼트 스타일을 결정. ex) **"quoteProps": "as-needed"**
+  "trailingComma": "none",     // **마지막 콤마 사용 여부**
+  "bracketSpacing": true,      // **괄호 사이의 공백 사용 여부**
+  "jsxBracketSameLine": false, // JSX 요소의 괄호를 여는 태그와 같은 줄에 놓을지 여부
+  "arrowParens": "always",     //  화살표 함수의 매개변수에 괄호를 추가할지 여부 : 항상 괄호 사용
+  "proseWrap": "preserve",     // 텍스트 문단의 래핑 방식을 설정 : 텍스트 래핑 유지
+  "htmlWhitespaceSensitivity": "css", //  HTML 파일에서 공백의 처리 방식을 설정 : css 동일 방식 사용
+  "vueIndentScriptAndStyle": false, // **Vue 파일 스크립트 및 스타일 들여쓰기**
+  "endOfLine": "lf"                 // 파일의 줄 끝에 사용되는 문자를 설정 : 엔터
+}
