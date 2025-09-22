@@ -5,5 +5,5 @@
 </template>
 
 <script setup>
-import Graph3D from './components/Graph3D.vue'
+import Graph3D from "@components/Graph3D.vue";
 </script>
