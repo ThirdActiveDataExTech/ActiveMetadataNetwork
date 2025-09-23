@@ -32,6 +32,7 @@ import { ref, onMounted, onBeforeUnmount, computed } from "vue";
 import ForceGraph3D from "3d-force-graph";
 import Modal from "@/components/common/modal/Modal.vue";
 import DetailTable from "@/components/common/detail-table/DetailTable.vue";
+import { colorFromGroup } from "@/utils/color";
 
 const API_BASE = "http://localhost:8800";
 const container = ref(null);
@@ -215,29 +216,11 @@ async function loadGraph() {
 
   // 처음 생성 시
   if (!fg) {
-    // 1) 그룹 → 고정 색상 매핑 (문자/숫자 모두 OK)
-    function hashString(str) {
-      // 간단하고 빠른 djb2 해시
-      let h = 5381;
-      for (let i = 0; i < str.length; i++) h = (h << 5) + h + str.charCodeAt(i);
-      return h >>> 0; // unsigned
-    }
-    function colorFromGroup(group) {
-      const g = String(group ?? "unknown");
-      const h = hashString(g);
-      // hue는 0~359로, s/l은 고정(보기 좋은 파스텔/비비드 조절)
-      const hue = h % 360;
-      const sat = 100; // 60~75 추천
-      const lig = 50; // 45~60 추천
-      return `hsl(${hue}, ${sat}%, ${lig}%)`;
-    }
-
     const nodeColorFn = (n) => {
       const base = colorFromGroup(n.group);
       if (!isHighlightActive()) return base; // 평소엔 그룹 고정색
       return highlightNodes.has(n) ? base : "#444"; // 비강조는 어둡게
     };
-
     const nodeOpacityFn = () => 1;
 
     const linkColorFn = (l) => {
@@ -248,12 +231,8 @@ async function loadGraph() {
       if (!isHighlightActive()) return 0.2 + 0.6 * (l.weight || 0);
       return highlightLinks.has(l) ? 0.95 : 0.08;
     };
-
     const linkWidthFn = (l) =>
       highlightLinks.has(l) ? 3 : 0.5 + 2.5 * (l.weight || 0);
-
-    // console.log(new Set(data.nodes.map(n => n.group)));
-    console.log(nodeOpacityFn);
 
     fg = ForceGraph3D()(container.value)
       .backgroundColor("#000")
