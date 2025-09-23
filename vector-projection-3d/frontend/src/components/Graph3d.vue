@@ -27,7 +27,7 @@
   </Modal>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { ref, onMounted, onBeforeUnmount, computed } from "vue";
 import ForceGraph3D from "3d-force-graph";
 import Modal from "@/components/common/modal/Modal.vue";

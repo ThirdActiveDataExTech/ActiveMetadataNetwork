@@ -4,6 +4,6 @@
   </main>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import Graph3D from "@components/Graph3D.vue";
 </script>
