@@ -202,11 +202,16 @@ function activateLinkNeighborhood(link) {
   }
   highlightLinks.add(link); // 클릭한 링크 자체
 }
-function isHighlightActive() {
-  return highlightNodes.size > 0 || highlightLinks.size > 0;
-}
 
-async function loadGraph() {
+const isHighlightActive = () => {
+  return highlightNodes.size > 0 || highlightLinks.size > 0;
+};
+
+const isSelectedNode = (n) => {
+  return n.id === selectedData.value?.id;
+};
+
+const loadGraph = async () => {
   const res = await fetch(`${API_BASE}/graph`);
   const data = await res.json();
 
@@ -218,10 +223,21 @@ async function loadGraph() {
   if (!fg) {
     const nodeColorFn = (n) => {
       const base = colorFromGroup(n.group);
-      if (!isHighlightActive()) return base; // 평소엔 그룹 고정색
-      return highlightNodes.has(n) ? base : "#444"; // 비강조는 어둡게
+
+      if (isHighlightActive()) {
+        return highlightNodes.has(n)
+          ? isSelectedNode(n)
+            ? colorFromGroup(n.group, { s: 100, l: 70 }) // 클릭 노드 색상 설정
+            : base
+          : "#444"; // 비강조는 어둡게
+      } else {
+        return base;
+      }
     };
     const nodeOpacityFn = () => 1;
+    const nodeValFn = (n) => {
+      return isSelectedNode(n) ? 8 : 1;
+    };
 
     const linkColorFn = (l) => {
       if (highlightLinks.has(l)) return "#ffd166";
@@ -236,9 +252,9 @@ async function loadGraph() {
 
     fg = ForceGraph3D()(container.value)
       .backgroundColor("#000")
-      .nodeAutoColorBy("group") // report_type별 색상
       .nodeColor(nodeColorFn)
       .nodeOpacity(nodeOpacityFn())
+      .nodeVal(nodeValFn)
       .nodeLabel((n) => `Node ${n.id} (${n.summary})`)
       .linkColor(linkColorFn)
       .linkOpacity(linkOpacityFn)
@@ -318,7 +334,7 @@ async function loadGraph() {
   buildIndex(data);
   computeComponents(data);
   fg.refresh();
-}
+};
 
 /*** 모달 설정 ***/
 const selectedDataMode = ref("node");

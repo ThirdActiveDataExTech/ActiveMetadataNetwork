@@ -11,7 +11,7 @@ export const colorFromGroup = (
   group: unknown,
   opts: { s?: number; l?: number },
 ): string => {
-  const { s = 70, l = 50 } = opts ?? {};
+  const { s = 65, l = 50 } = opts ?? {};
   const key = String(group ?? "unknown");
   const ck = `${key}_${s}_${l}`;
   const hit = cache.get(ck);
