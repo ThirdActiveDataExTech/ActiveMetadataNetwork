@@ -9,7 +9,7 @@ export const hashString = (str: string) => {
 const cache = new Map<string, string>();
 export const colorFromGroup = (
   group: unknown,
-  opts: { s?: number; l?: number },
+  opts?: { s?: number; l?: number },
 ): string => {
   const { s = 65, l = 50 } = opts ?? {};
   const key = String(group ?? "unknown");

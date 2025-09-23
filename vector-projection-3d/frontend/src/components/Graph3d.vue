@@ -12,12 +12,12 @@
         <DetailTable :data="selectedData" :fields="fields"></DetailTable>
         <template v-if="selectedDataMode === 'link'">
           <DetailTable
-            :data="selectedData?.source"
+            :data="selectedData?.source as GraphNode"
             :fields="nodeFields"
             title="Source"
           ></DetailTable>
           <DetailTable
-            :data="selectedData?.target"
+            :data="selectedData?.target as GraphNode"
             :fields="nodeFields"
             title="Target"
           ></DetailTable>
@@ -32,6 +32,8 @@ import { ref, onMounted, onBeforeUnmount, computed } from "vue";
 import ForceGraph3D from "3d-force-graph";
 import Modal from "@/components/common/modal/Modal.vue";
 import DetailTable from "@/components/common/detail-table/DetailTable.vue";
+import type { Field } from "@/types/detail-table";
+import type { GraphNode, GraphLink, GraphData } from "@/types/graph";
 import { colorFromGroup } from "@/utils/color";
 
 const API_BASE = "http://localhost:8800";
@@ -58,7 +60,7 @@ let lastClickAt = 0;
 let lastClickNodeRef = null;
 
 // 카메라 이동 함수
-function focusCameraOnNode(node, distance = 120, ms = 1000) {
+function focusCameraOnNode(node: GraphNode, distance = 120, ms = 1000) {
   const distRatio =
     1 + distance / Math.hypot(node.x || 1, node.y || 1, node.z || 1);
   fg.cameraPosition(
@@ -72,16 +74,16 @@ function focusCameraOnNode(node, distance = 120, ms = 1000) {
   );
 }
 
-function getNodeId(n) {
-  return typeof n === "object" ? n.id : n;
+function getNodeId(node: GraphNode) {
+  return typeof node === "object" ? node.id : node;
 }
-function getEndIds(l) {
-  const s = typeof l.source === "object" ? l.source.id : l.source;
-  const t = typeof l.target === "object" ? l.target.id : l.target;
+function getEndIds(link: GraphLink) {
+  const s = typeof link.source === "object" ? link.source.id : link.source;
+  const t = typeof link.target === "object" ? link.target.id : link.target;
   return [s, t];
 }
 
-function computeComponents(data) {
+function computeComponents(data: GraphData) {
   nodeIdToComp = new Map();
   compIdToNodeIds = new Map();
   compIdToLinks = new Map();
@@ -120,7 +122,7 @@ function computeComponents(data) {
   }
 }
 
-function highlightComponentByNode(node) {
+function highlightComponentByNode(node: GraphNode) {
   resetHighlight();
   if (!node) return;
   const data = fg.graphData();
@@ -136,7 +138,7 @@ function highlightComponentByNode(node) {
   }
 }
 
-function highlightComponentByLink(link) {
+function highlightComponentByLink(link: GraphLink) {
   resetHighlight();
   if (!link) return;
   const data = fg.graphData();
@@ -150,7 +152,7 @@ function highlightComponentByLink(link) {
   for (const l of compIdToLinks.get(cid) || []) highlightLinks.add(l);
 }
 
-function buildIndex(data) {
+function buildIndex(data: GraphData) {
   adj = new Map();
   incidentLinks = new Map();
   for (const n of data.nodes) {
@@ -169,7 +171,7 @@ function resetHighlight() {
   highlightNodes.clear();
   highlightLinks.clear();
 }
-function activateNodeNeighborhood(node) {
+function activateNodeNeighborhood(node: GraphNode) {
   resetHighlight();
   if (!node) return;
   // 자신 + 이웃 노드
@@ -184,7 +186,7 @@ function activateNodeNeighborhood(node) {
     highlightLinks.add(l);
   }
 }
-function activateLinkNeighborhood(link) {
+function activateLinkNeighborhood(link: GraphLink) {
   resetHighlight();
   if (!link) return;
   const data = fg.graphData();
@@ -207,8 +209,8 @@ const isHighlightActive = () => {
   return highlightNodes.size > 0 || highlightLinks.size > 0;
 };
 
-const isSelectedNode = (n) => {
-  return n.id === selectedData.value?.id;
+const isSelectedNode = (node: GraphNode) => {
+  return node.id === selectedData.value?.id;
 };
 
 const loadGraph = async () => {
@@ -221,13 +223,13 @@ const loadGraph = async () => {
 
   // 처음 생성 시
   if (!fg) {
-    const nodeColorFn = (n) => {
-      const base = colorFromGroup(n.group);
+    const nodeColorFn = (node: GraphNode) => {
+      const base = colorFromGroup(node.group);
 
       if (isHighlightActive()) {
-        return highlightNodes.has(n)
-          ? isSelectedNode(n)
-            ? colorFromGroup(n.group, { s: 100, l: 70 }) // 클릭 노드 색상 설정
+        return highlightNodes.has(node)
+          ? isSelectedNode(node)
+            ? colorFromGroup(node.group, { s: 100, l: 70 }) // 클릭 노드 색상 설정
             : base
           : "#444"; // 비강조는 어둡게
       } else {
@@ -235,27 +237,28 @@ const loadGraph = async () => {
       }
     };
     const nodeOpacityFn = () => 1;
-    const nodeValFn = (n) => {
-      return isSelectedNode(n) ? 8 : 1;
+    const nodeValFn = (node: GraphNode) => {
+      return isSelectedNode(node) ? 8 : 1;
     };
 
-    const linkColorFn = (l) => {
-      if (highlightLinks.has(l)) return "#ffd166";
+    const linkColorFn = (link: GraphLink) => {
+      if (highlightLinks.has(link)) return "#ffd166";
       return isHighlightActive() ? "#333a" : "#9aa";
     };
-    const linkOpacityFn = (l) => {
-      if (!isHighlightActive()) return 0.2 + 0.6 * (l.weight || 0);
-      return highlightLinks.has(l) ? 0.95 : 0.08;
+    const linkOpacityFn = (link: GraphLink) => {
+      if (!isHighlightActive()) return 0.2 + 0.6 * (link.weight || 0);
+      return highlightLinks.has(link) ? 0.95 : 0.08;
     };
-    const linkWidthFn = (l) =>
-      highlightLinks.has(l) ? 3 : 0.5 + 2.5 * (l.weight || 0);
+    const linkWidthFn = (link: GraphLink) =>
+      highlightLinks.has(link) ? 3 : 0.5 + 2.5 * (link.weight || 0);
 
-    fg = ForceGraph3D()(container.value)
+    const createFG = ForceGraph3D as unknown as (el?: HTMLElement) => any;
+    fg = createFG()(container.value)
       .backgroundColor("#000")
       .nodeColor(nodeColorFn)
       .nodeOpacity(nodeOpacityFn())
       .nodeVal(nodeValFn)
-      .nodeLabel((n) => `Node ${n.id} (${n.summary})`)
+      .nodeLabel((node: GraphNode) => `Node ${node.id} (${node.summary})`)
       .linkColor(linkColorFn)
       .linkOpacity(linkOpacityFn)
       .linkWidth(linkWidthFn)
@@ -264,14 +267,15 @@ const loadGraph = async () => {
       .showNavInfo(false)
       .graphData(data)
       .linkLabel(
-        (l) => `MST (${l.report_type}) • sim=${(l.weight || 0).toFixed(2)}`,
+        (link: GraphLink) =>
+          `MST (${link.report_type}) • sim=${(link.weight || 0).toFixed(2)}`,
       );
 
     // 좌표 고정
     fg.cooldownTime(0);
 
     // 노드 클릭 → 연결 성분 전체 하이라이트
-    fg.onNodeClick((node) => {
+    fg.onNodeClick((node: GraphNode) => {
       // modal data setting
       selectedDataMode.value = "node";
 
@@ -302,7 +306,7 @@ const loadGraph = async () => {
     });
 
     // 링크 클릭 → 연결 성분 전체 하이라이트  ✅
-    fg.onLinkClick((link) => {
+    fg.onLinkClick((link: GraphLink) => {
       // modal data setting
       selectedDataMode.value = "link";
       selectedData.value = link;
@@ -338,7 +342,7 @@ const loadGraph = async () => {
 
 /*** 모달 설정 ***/
 const selectedDataMode = ref("node");
-const selectedData = ref(null);
+const selectedData = ref<GraphNode | GraphLink | null>(null);
 const isModalOpen = computed(() => {
   return selectedData.value !== null;
 });
@@ -353,11 +357,11 @@ const nodeFields = [
     clampLines: 4,
     scrollOnClamp: true,
   },
-];
+] as Field[];
 const linkFields = [
   { key: "type", label: "유형" },
   { key: "report_type", label: "리포트 유형" },
-];
+] as Field[];
 const fields = computed(() => {
   return selectedDataMode.value === "node" ? nodeFields : linkFields;
 });
