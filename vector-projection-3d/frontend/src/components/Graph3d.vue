@@ -34,9 +34,9 @@ import Modal from "@/components/common/modal/Modal.vue";
 import DetailTable from "@/components/common/detail-table/DetailTable.vue";
 import type { Field } from "@/types/detail-table";
 import type { GraphNode, GraphLink, GraphData } from "@/types/graph";
+import { API_BASE } from "@/config/env";
 import { colorFromGroup } from "@/utils/color";
 
-const API_BASE = "http://localhost:8800";
 const container = ref(null);
 let fg = null;
 let resizeOff = () => {};
