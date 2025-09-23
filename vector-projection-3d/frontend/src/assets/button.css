@@ -1,0 +1,45 @@
+/* 버튼 공통 */
+.btn-primary {
+  color: #fff;
+  background: var(--blue-700);
+  border: none;
+  font-weight: 600;
+  font-size: 14px;
+  border-radius: 8px;
+  padding: 10px 20px;
+  cursor: pointer;
+  outline: none;
+  transition:
+    background 0.15s ease,
+    box-shadow 0.15s ease;
+}
+.btn-primary:hover {
+  background: var(--blue-800);
+}
+.btn-primary:focus {
+  box-shadow: 0 0 0 4px var(--blue-300);
+}
+
+.btn-secondary {
+  background: #fff;
+  color: #111827;
+  border: 1px solid var(--gray-200);
+  font-weight: 500;
+  font-size: 14px;
+  border-radius: 8px;
+  padding: 10px 20px;
+  cursor: pointer;
+  outline: none;
+  margin-left: 12px;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+.btn-secondary:hover {
+  background: var(--gray-100);
+  color: var(--blue-700);
+}
+.btn-secondary:focus {
+  box-shadow: 0 0 0 4px rgba(55, 65, 81, 0.35);
+}

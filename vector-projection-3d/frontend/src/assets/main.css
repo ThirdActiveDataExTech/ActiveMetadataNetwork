@@ -1,6 +1,13 @@
-@import './base.css';
+@import "./base.css";
+@import "./button.css";
 
-html, body, #app { margin: 0; padding: 0; background: #0b0b0b; }
+html,
+body,
+#app {
+  margin: 0;
+  padding: 0;
+  background: #0b0b0b;
+}
 
 /*#app {*/
 /*  max-width: 1280px;*/
@@ -30,8 +37,9 @@ a,
   }
 
   #app {
-    display: grid;
+    /*display: grid;
     grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
+    padding: 0 2rem;*/
+    display: block;
   }
 }
