@@ -1,0 +1,113 @@
+:root {
+  --clamp: 3;
+}
+
+.detail-wrap {
+  border: 1px solid var(--gray-800);
+  border-radius: 12px;
+  background: var(--gray-900);
+  overflow: hidden;
+}
+
+.detail-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: #0b1220;
+}
+.detail-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #e6edf8;
+}
+.detail-head-extra {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.detail-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--gray-200);
+  table-layout: fixed;
+}
+.row:nth-child(odd) {
+  background: var(--gray-900);
+}
+.row:nth-child(even) {
+  background: var(--gray-900);
+}
+
+.th {
+  width: 160px;
+  text-align: left;
+  font-weight: 600;
+  color: #cbd5e1;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 10px 14px;
+  vertical-align: top;
+}
+.td {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 10px 14px;
+  vertical-align: top;
+  position: relative;
+  display: flex;
+  gap: 10px;
+}
+
+.td-right {
+  text-align: right;
+}
+.td-center {
+  text-align: center;
+}
+.mono {
+  font-family:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+}
+
+/* 값 공통 */
+.value {
+  flex: 1 1 auto;
+  min-width: 0; /* 길 때 줄바꿈 */
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: #e6edf8;
+  line-height: 1.55;
+}
+.value > * {
+  margin: 0;
+}
+
+/* 스크롤 X */
+.value.clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: var(--clamp);
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 스크롤 O */
+.value.clamp-scroll {
+  display: block;
+  max-height: calc(var(--clamp) * 1lh); /* 요소의 실제 line-height 기준 */
+  overflow-y: auto;
+}
+
+/* 스크롤바 미세 스타일 */
+.value.clamp-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+.value.clamp-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+}
+.value.clamp-scroll:hover::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.28);
+}
