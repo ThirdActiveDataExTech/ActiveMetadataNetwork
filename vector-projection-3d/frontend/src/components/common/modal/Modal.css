@@ -96,6 +96,8 @@
   opacity: 0;
   animation: modal-in 0.18s ease-out forwards;
   height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
 }
 @keyframes modal-in {
   to {
