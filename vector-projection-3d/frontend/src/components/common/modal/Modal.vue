@@ -2,7 +2,7 @@
   <!-- Main modal -->
   <div :class="[useOverlay ? 'modal-overlay' : 'modal-layer', placeClass]">
     <div
-      :style="{ width: `${width}px`, height: `${height}px` }"
+      :style="{ width: modalWidth, height: modalHeight }"
       class="modal-container"
     >
       <!-- Modal content -->
@@ -78,11 +78,11 @@ const props = defineProps({
     default: false,
   },
   width: {
-    type: Number,
+    type: [Number, String],
     default: 630,
   },
   height: {
-    type: Number,
+    type: [Number, String],
     default: 600,
   },
   title: {
@@ -110,6 +110,14 @@ const props = defineProps({
       ].includes(v),
   },
 });
+
+const modalWidth = () => {
+  return typeof props.width === "number" ? `${props.width}px` : props.width;
+};
+
+const modalHeight = () => {
+  return typeof props.height === "number" ? `${props.height}px` : props.height;
+};
 
 const placeClass = computed(
   () =>
