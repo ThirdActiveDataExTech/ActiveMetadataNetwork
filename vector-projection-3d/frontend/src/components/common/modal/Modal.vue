@@ -1,7 +1,10 @@
 <template>
   <!-- Main modal -->
   <div :class="[useOverlay ? 'modal-overlay' : 'modal-layer', placeClass]">
-    <div class="modal-container">
+    <div
+      :style="{ width: `${width}px`, height: `${height}px` }"
+      class="modal-container"
+    >
       <!-- Modal content -->
       <div class="modal-content">
         <!-- Modal header -->
@@ -73,6 +76,14 @@ const props = defineProps({
   useOverlay: {
     type: Boolean,
     default: false,
+  },
+  width: {
+    type: Number,
+    default: 630,
+  },
+  height: {
+    type: Number,
+    default: 600,
   },
   title: {
     type: String,
