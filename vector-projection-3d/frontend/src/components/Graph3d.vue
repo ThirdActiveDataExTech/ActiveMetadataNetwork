@@ -1,38 +1,20 @@
 <template>
   <div ref="container" class="graph-container"></div>
-  <Modal
+  <PreviewDataModal
     v-if="isModalOpen"
-    :show-footer="false"
-    :title="`${selectedDataMode === 'node' ? '노드' : '링크'} 정보`"
-    placement="top-right"
+    :linked-node-data="[...highlightNodes] as GraphNode[]"
+    :selected-data="selectedData"
+    :selected-data-mode="selectedDataMode"
+    mode="connections"
     @close="selectedData = null"
   >
-    <template v-slot:body>
-      <div class="table-group">
-        <DetailTable :data="selectedData" :fields="fields"></DetailTable>
-        <template v-if="selectedDataMode === 'link'">
-          <DetailTable
-            :data="selectedData?.source as GraphNode"
-            :fields="nodeFields"
-            title="Source"
-          ></DetailTable>
-          <DetailTable
-            :data="selectedData?.target as GraphNode"
-            :fields="nodeFields"
-            title="Target"
-          ></DetailTable>
-        </template>
-      </div>
-    </template>
-  </Modal>
+  </PreviewDataModal>
 </template>
 
 <script lang="ts" setup>
 import { ref, onMounted, onBeforeUnmount, computed } from "vue";
 import ForceGraph3D from "3d-force-graph";
-import Modal from "@/components/common/modal/Modal.vue";
-import DetailTable from "@/components/common/detail-table/DetailTable.vue";
-import type { Field } from "@/types/detail-table";
+import PreviewDataModal from "@components/modal/preview-data-modal/PreviewDataModal.vue";
 import type { GraphNode, GraphLink, GraphData } from "@/types/graph";
 import { API_BASE } from "@/config/env";
 import { colorFromGroup } from "@/utils/color";
@@ -341,29 +323,10 @@ const loadGraph = async () => {
 };
 
 /*** 모달 설정 ***/
-const selectedDataMode = ref("node");
+const selectedDataMode = ref<"node" | "link">("node");
 const selectedData = ref<GraphNode | GraphLink | null>(null);
 const isModalOpen = computed(() => {
   return selectedData.value !== null;
-});
-const nodeFields = [
-  { key: "id", label: "ID", mono: true, format: "text" },
-  { key: "group", label: "그룹" },
-  { key: "report_type", label: "리포트 유형" },
-  {
-    key: "summary",
-    label: "요약",
-    clamp: true,
-    clampLines: 4,
-    scrollOnClamp: true,
-  },
-] as Field[];
-const linkFields = [
-  { key: "type", label: "유형" },
-  { key: "report_type", label: "리포트 유형" },
-] as Field[];
-const fields = computed(() => {
-  return selectedDataMode.value === "node" ? nodeFields : linkFields;
 });
 
 onMounted(async () => {
@@ -378,9 +341,4 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style scoped>
-.table-group {
-  display: grid;
-  gap: 15px;
-}
-</style>
+<style scoped></style>
