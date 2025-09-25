@@ -1,7 +1,10 @@
 <template>
   <!-- Main modal -->
   <div :class="[useOverlay ? 'modal-overlay' : 'modal-layer', placeClass]">
-    <div class="modal-container">
+    <div
+      :style="{ width: modalWidth, height: modalHeight }"
+      class="modal-container"
+    >
       <!-- Modal content -->
       <div class="modal-content">
         <!-- Modal header -->
@@ -74,6 +77,14 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  width: {
+    type: [Number, String],
+    default: 630,
+  },
+  height: {
+    type: [Number, String],
+    default: 600,
+  },
   title: {
     type: String,
     default: "Title",
@@ -99,6 +110,14 @@ const props = defineProps({
       ].includes(v),
   },
 });
+
+const modalWidth = () => {
+  return typeof props.width === "number" ? `${props.width}px` : props.width;
+};
+
+const modalHeight = () => {
+  return typeof props.height === "number" ? `${props.height}px` : props.height;
+};
 
 const placeClass = computed(
   () =>

@@ -1,0 +1,9 @@
+.graph-inspector-connections__detail {
+  display: grid;
+  gap: 18px;
+}
+
+.graph-inspector-connections__actions {
+  display: flex;
+  justify-content: end;
+}
