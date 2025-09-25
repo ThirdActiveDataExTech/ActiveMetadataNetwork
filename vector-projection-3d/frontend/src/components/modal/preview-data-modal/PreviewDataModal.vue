@@ -31,6 +31,15 @@ import type { GraphNode, GraphLink } from "@/types/graph";
 import { PropType } from "vue";
 
 const props = defineProps({
+  /**
+   * 노드/링크 클릭 시 동작 모드.
+   *
+   * - "connections": 노드 클릭 → 노드 상세
+   *                  링크 클릭 → 연결된 모든 노드 목록
+   *                  목록 행 선택 → 노드 상세
+   * - "link-detail": 노드 클릭 → 노드 상세
+   *                  링크 클릭 → 링크 상세
+   */
   mode: {
     type: String as PropType<"connections" | "link-detail">,
     default: "link-detail",
