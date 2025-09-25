@@ -1,0 +1,4 @@
+.link-detail__table-group {
+  display: grid;
+  gap: 8px;
+}
